@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Birthday Surprise</title>
+  <style>
+    :root {
+      --bg-1: #16061d;
+      --bg-2: #2d0e39;
+      --pink: #ff4fa3;
+      --gold: #ffd666;
+      --card: rgba(255, 255, 255, 0.08);
+      --text: #fff6fc;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Poppins", "Segoe UI", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #3f1650, var(--bg-1) 50%, #0b0410);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    .stars,
+    .hearts {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .stars::before,
+    .stars::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(2px 2px at 20% 30%, #ffffffaa 50%, transparent 51%),
+        radial-gradient(2px 2px at 80% 20%, #ffffffbb 50%, transparent 51%),
+        radial-gradient(1.5px 1.5px at 60% 70%, #ffffff88 50%, transparent 51%),
+        radial-gradient(2px 2px at 35% 80%, #ffffff99 50%, transparent 51%);
+      animation: twinkle 4s linear infinite;
+    }
+
+    .stars::after {
+      opacity: 0.55;
+      transform: scale(1.2);
+      animation-duration: 7s;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.8; }
+      50% { opacity: 0.4; }
+    }
+
+    .container {
+      position: relative;
+      z-index: 2;
+      width: min(1000px, 92%);
+      margin: 0 auto;
+      padding: 24px 0 60px;
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(255, 79, 163, 0.2);
+      border: 1px solid rgba(255, 214, 102, 0.55);
+      margin-bottom: 14px;
+      font-size: 0.9rem;
+      letter-spacing: 0.04em;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 6vw, 4rem);
+      line-height: 1.1;
+      margin-bottom: 8px;
+      text-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    .subtitle {
+      color: #ffdff2;
+      opacity: 0.95;
+      margin-bottom: 24px;
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+    }
+
+    .gift-area {
+      margin: 28px auto 34px;
+      perspective: 900px;
+      width: 210px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .gift {
+      position: relative;
+      width: 210px;
+      height: 180px;
+      margin: 0 auto;
+      transform-style: preserve-3d;
+      transition: transform 0.7s ease;
+    }
+
+    .box {
+      position: absolute;
+      left: 0;
+      right: 0;
+      margin: auto;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+    }
+
+    .lid {
+      width: 210px;
+      height: 52px;
+      top: 0;
+      background: linear-gradient(120deg, #ff6ab8, #ff2f8e);
+      transform-origin: bottom;
+      transition: transform 0.9s ease;
+    }
+
+    .base {
+      width: 180px;
+      height: 128px;
+      top: 44px;
+      background: linear-gradient(120deg, #ff4fa3, #d7287f);
+    }
+
+    .ribbon-v {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      transform: translateX(-50%);
+      width: 30px;
+      height: 100%;
+      background: linear-gradient(#ffe28f, #ffc947);
+      border-radius: 8px;
+      z-index: 2;
+    }
+
+    .ribbon-h {
+      position: absolute;
+      top: 48%;
+      left: 0;
+      width: 100%;
+      height: 22px;
+      transform: translateY(-50%);
+      background: linear-gradient(#ffe28f, #ffc947);
+      border-radius: 8px;
+      z-index: 2;
+    }
+
+    .open .lid {
+      transform: rotateX(-130deg) translateY(-10px);
+    }
+
+    .open .gift {
+      transform: translateY(2px) scale(1.03);
+    }
+
+    .gift-note {
+      margin-top: 14px;
+      color: #ffe5f3;
+      font-size: 0.95rem;
+    }
+
+    .message {
+      max-width: 760px;
+      margin: 0 auto 28px;
+      padding: 20px;
+      background: var(--card);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 18px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    .gallery-wrap {
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.13);
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin-top: 12px;
+    }
+
+    .photo-card {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+      transform: translateY(18px);
+      opacity: 0;
+      transition: transform 0.6s ease, opacity 0.6s ease;
+    }
+
+    .reveal .photo-card {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .photo-card img {
+      width: 100%;
+      height: 230px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .big-wish {
+      margin-top: 18px;
+      font-size: clamp(1.1rem, 3vw, 1.6rem);
+      color: #ffe28f;
+      text-shadow: 0 0 16px rgba(255, 214, 102, 0.45);
+    }
+
+    .heart {
+      position: absolute;
+      bottom: -20px;
+      width: 16px;
+      height: 16px;
+      background: #ff5cab;
+      transform: rotate(45deg);
+      animation: floatUp linear forwards;
+      opacity: 0.85;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: "";
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #ff5cab;
+    }
+
+    .heart::before { left: -8px; }
+    .heart::after { top: -8px; }
+
+    @keyframes floatUp {
+      to {
+        transform: translateY(-110vh) rotate(45deg);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .photo-card img { height: 200px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="stars"></div>
+  <div class="hearts" id="hearts"></div>
+
+  <main class="container" id="surpriseContainer">
+    <div class="badge">A Special Birthday Surprise</div>
+    <h1>Happy Birthday, My Favorite Person</h1>
+    <p class="subtitle">Tap the gift to open your surprise.</p>
+
+    <section class="gift-area" id="giftArea" aria-label="Open gift surprise" role="button">
+      <div class="gift" id="gift">
+        <div class="box lid"></div>
+        <div class="box base"></div>
+        <div class="ribbon-v"></div>
+        <div class="ribbon-h"></div>
+      </div>
+      <p class="gift-note">Click once to open your gift and start music</p>
+    </section>
+
+    <section class="message hidden" id="messageBox">
+      <p>
+        Wishing you a day full of smiles, love, and all the happiness you deserve.
+        Thank you for making life brighter with your laugh and your heart.
+      </p>
+      <p class="big-wish">May this year be your most beautiful one yet.</p>
+    </section>
+
+    <section class="gallery-wrap hidden" id="galleryWrap">
+      <h2>Memories Gallery</h2>
+      <div class="gallery">
+        <div class="photo-card"><img src="./photoes/image.png" alt="Birthday memory 1" /></div>
+        <div class="photo-card"><img src="./photoes/image 2.png" alt="Birthday memory 2" /></div>
+        <div class="photo-card"><img src="./photoes/image 3.png" alt="Birthday memory 3" /></div>
+        <div class="photo-card"><img src="./photoes/image copy.png" alt="Birthday memory 4" /></div>
+      </div>
+    </section>
+  </main>
+
+  <audio id="bgMusic" preload="auto" loop>
+    <source src="./आज_का_दिन_खास.mp3" type="audio/mpeg" />
+  </audio>
+
+  <script>
+    const giftArea = document.getElementById("giftArea");
+    const gift = document.getElementById("gift");
+    const messageBox = document.getElementById("messageBox");
+    const galleryWrap = document.getElementById("galleryWrap");
+    const container = document.getElementById("surpriseContainer");
+    const bgMusic = document.getElementById("bgMusic");
+    const heartsLayer = document.getElementById("hearts");
+    let opened = false;
+
+    function burstHearts(count = 26) {
+      for (let i = 0; i < count; i++) {
+        const heart = document.createElement("span");
+        heart.className = "heart";
+        heart.style.left = `${Math.random() * 100}%`;
+        heart.style.animationDuration = `${4 + Math.random() * 3}s`;
+        heart.style.opacity = `${0.55 + Math.random() * 0.4}`;
+        heart.style.transform = `scale(${0.7 + Math.random() * 1.1}) rotate(45deg)`;
+        heartsLayer.appendChild(heart);
+        setTimeout(() => heart.remove(), 7200);
+      }
+    }
+
+    async function startMusic() {
+      try {
+        await bgMusic.play();
+      } catch (err) {
+        console.log("Music could not autoplay until user interaction.", err);
+      }
+    }
+
+    giftArea.addEventListener("click", async () => {
+      if (opened) return;
+      opened = true;
+
+      container.classList.add("open");
+      messageBox.classList.remove("hidden");
+      galleryWrap.classList.remove("hidden");
+
+      requestAnimationFrame(() => {
+        galleryWrap.classList.add("reveal");
+      });
+
+      burstHearts();
+      await startMusic();
+      giftArea.querySelector(".gift-note").textContent = "Surprise opened. Enjoy your day!";
+    });
+  </script>
+</body>
+</html>
